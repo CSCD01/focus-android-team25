@@ -32,6 +32,9 @@
     <!-- Menu item: Share the currently visible page -->
     <string name="menu_share">Share…</string>
 
+    <!-- Menu item: Open a new browser tab -->
+    <string name="open_new_tab">Open New Tab</string>
+
     <!-- Menu item: Report an issue on the current site -->
     <string name="menu_report_site_issue">Report Site Issue</string>
 
