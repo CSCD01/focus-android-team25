@@ -70,6 +70,7 @@ import org.mozilla.focus.biometrics.BiometricAuthenticationHandler
 import org.mozilla.focus.biometrics.Biometrics
 import org.mozilla.focus.broadcastreceiver.DownloadBroadcastReceiver
 import org.mozilla.focus.exceptions.ExceptionDomains
+import org.mozilla.focus.ext.components
 import org.mozilla.focus.ext.isSearch
 import org.mozilla.focus.ext.requireComponents
 import org.mozilla.focus.ext.shouldRequestDesktopSite
@@ -94,6 +95,7 @@ import org.mozilla.focus.utils.StatusBarUtils
 import org.mozilla.focus.utils.SupportUtils
 import org.mozilla.focus.utils.UrlUtils
 import org.mozilla.focus.utils.ViewUtils
+import org.mozilla.focus.utils.Settings
 import org.mozilla.focus.web.Download
 import org.mozilla.focus.web.HttpAuthenticationDialogBuilder
 import org.mozilla.focus.web.IWebView
@@ -1167,6 +1169,25 @@ class BrowserFragment : WebFragment(), LifecycleObserver, View.OnClickListener,
                 requireComponents.sessionManager.add(session, selected = true)
 
                 TelemetryWrapper.reportSiteIssueEvent()
+            }
+
+            R.id.open_new_tab -> {
+                val defaultIdentifier = Settings.getInstance(context!!).defaultSearchEngineName
+                val searchEngine = context!!.components.searchEngineManager.getDefaultSearchEngine(context!!, defaultIdentifier)
+                val newTabUrl = searchEngine.buildSearchUrl("")
+                val newSession = Session(newTabUrl, source = Session.Source.MENU)
+
+                context!!.components.sessionManager.add(
+                        newSession,
+                        selected = true
+                )
+
+                TelemetryWrapper.openLinkInNewTabEvent()
+                PreferenceManager.getDefaultSharedPreferences(context).edit()
+                        .putBoolean(
+                                context!!.getString(R.string.has_opened_new_tab),
+                                true
+                        ).apply()
             }
 
             R.id.find_in_page -> {
