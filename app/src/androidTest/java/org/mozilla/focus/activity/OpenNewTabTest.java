@@ -103,6 +103,7 @@ public class OpenNewTabTest {
         onView(withId(R.id.whats_new))
                 .check(matches(isDisplayed()))
                 .perform(click());
+        TestHelper.browserURLbar.waitForExists(waitingTime);
         assertTrue(TestHelper.browserURLbar.getText().contains("support.mozilla.org"));
 
         /* Check that the new tab option is present */
@@ -115,6 +116,7 @@ public class OpenNewTabTest {
 
         /* Check that the new tab is opened correctly */
         newTabOption.click();
+        TestHelper.browserURLbar.waitForExists(waitingTime);
         assertTrue(TestHelper.browserURLbar.getText().contains("google.com"));
     }
 }
